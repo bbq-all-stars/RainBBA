@@ -4,6 +4,7 @@ function doPost(e) {
   var botIcon = "http://drive.google.com/uc?export=view&id=0ByCuUh9cGikBRThRd0ZnM1d6LVE";
   var verifyToken = PropertiesService.getScriptProperties().getProperty('OUTGOING_WEBHOOK_TOKEN');
   var yahooApiToken = PropertiesService.getScriptProperties().getProperty('YAHOO_API_TOKEN');
+  var coodinates = "35.6431249,139.7112571"
   
   //投稿の認証
   if (verifyToken != e.parameter.token) {
@@ -13,7 +14,7 @@ function doPost(e) {
   var app = SlackApp.create(token);
 
   //Trigger Words部分の削除
-  var url = "https://map.yahooapis.jp/weather/V1/place?appid=" + yahooApiToken + "&coordinates=35.6431249,139.7112571&output=json&interval=5";
+  var url = "https://map.yahooapis.jp/weather/V1/place?appid=" + yahooApiToken + "&coordinates=" + coodinates + "&output=json&interval=5";
   var urlFetchOption = {
     'method' : 'get',
     'contentType' : 'application/json; charset=utf-8',
