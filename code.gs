@@ -52,6 +52,6 @@ function doPost(e) {
 
   return app.postMessage(e.parameter.channel_id, message, {
     username: botName,
-    iconUrl: botIcon
+    icon_url: botIcon
   });
 }
