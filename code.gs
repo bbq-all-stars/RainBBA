@@ -30,7 +30,7 @@ function doPost(e) {
   if (nextRain && (!nowRain || nowRain < nextRain)){
     rainfall = nextRain;
   }
-  if (rainfall){
+  if (!rainfall){
     message = "雨は降っとらん！！！";
   } else if (rainfall < 1){
     message = "小雨が降っとるかもしれんな。";
