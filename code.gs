@@ -12,7 +12,7 @@ function doPost(e) {
   var app = SlackApp.create(token);
 
   //Trigger Words部分の削除
-  var url = "https://map.yahooapis.jp/weather/V1/place?appid=dj0zaiZpPXVhN3pyNnpkZGVldyZzPWNvbnN1bWVyc2VjcmV0Jng9YmM-&coordinates=35.6431249,139.7112571&output=json&interfal=5";
+  var url = "https://map.yahooapis.jp/weather/V1/place?appid=dj0zaiZpPXVhN3pyNnpkZGVldyZzPWNvbnN1bWVyc2VjcmV0Jng9YmM-&coordinates=35.6431249,139.7112571&output=json&interval=5";
   var urlFetchOption = {
     'method' : 'get',
     'contentType' : 'application/json; charset=utf-8',
