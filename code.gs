@@ -13,7 +13,6 @@ function doPost(e) {
   
   var app = SlackApp.create(token);
 
-  //Trigger Words部分の削除
   var url = "https://map.yahooapis.jp/weather/V1/place?appid=" + yahooApiToken + "&coordinates=" + coodinates + "&output=json&interval=5";
   var urlFetchOption = {
     'method' : 'get',
