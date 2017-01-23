@@ -1,7 +1,7 @@
 function doPost(e) {
   var token = PropertiesService.getScriptProperties().getProperty('SLACK_ACCESS_TOKEN');
   var botName = "お天気ババア";
-  var botIcon = "http://drive.google.com/uc?export=view&id=0ByCuUh9cGikBRThRd0ZnM1d6LVE";
+  var botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba.png";
   var verifyToken = PropertiesService.getScriptProperties().getProperty('OUTGOING_WEBHOOK_TOKEN');
   var yahooApiToken = PropertiesService.getScriptProperties().getProperty('YAHOO_API_TOKEN');
   var coodinates = "35.6431249,139.7112571"
