@@ -26,23 +26,27 @@ function doPost(e) {
   var nowRain = weatherList[0]["Rainfall"];
   var nextRain = weatherList[1]["Rainfall"];
   var message = "";
-  if (!nowRain && !nextRain){
+  var rainfall = nowRain;
+  if (nextRain && (!nowRain || nowRain < nextRain)){
+    rainfall = nextRain;
+  }
+  if (rainfall){
     message = "雨は降っとらん！！！";
-  } else if ((nowRain && nowRain < 1) || (nextRain && nextRain < 1)) {
+  } else if (rainfall < 1){
     message = "小雨が降っとるかもしれんな。";
-  } else if ((nowRain && nowRain < 3) || (nextRain && nextRain < 3)) {
+  } else if (rainfall < 3){
     message = "弱い雨が降っておる。気になるなら傘を持っていったほうがよいじゃろう。";
-  } else if ((nowRain && nowRain < 10) || (nextRain && nextRain < 10)) {
+  } else if (rainfall < 10){
     message = "雨が降っておる。傘は持ったか？";
-  } else if ((nowRain && nowRain < 20) || (nextRain && nextRain < 20)) {
+  } else if (rainfall < 20){
     message = "やや強い雨じゃ。傘は持ったか？";
-  } else if ((nowRain && nowRain < 30) || (nextRain && nextRain < 30)) {
+  } else if (rainfall < 30){
     message = "強い雨じゃ！出かけるなら必ず傘を持っていきなさい。";
-  } else if ((nowRain && nowRain < 50) || (nextRain && nextRain < 50)) {
+  } else if (rainfall < 50){
     message = "激しい雨が降っておる！！バケツを引っくり返したようじゃ！！！出かけんほうががええ！";
-  } else if ((nowRain && nowRain < 80) || (nextRain && nextRain < 80)) {
+  } else if (rainfall < 80){
     message = "非常に激しい雨でまるで瀧のようじゃ！！！！外に出るのはやめるんじゃ！！";
-  } else{
+  } else {
     message = "なにをしている！！！猛烈な雨じゃぞ！！！！一歩でも外に出たら死ぬぞ！！！！";
   }
 
