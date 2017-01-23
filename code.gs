@@ -1,11 +1,11 @@
 function doPost(e) {
   var token = PropertiesService.getScriptProperties().getProperty('SLACK_ACCESS_TOKEN');
-  var bot_name = "お天気ババア";
-  var bot_icon = "http://drive.google.com/uc?export=view&id=0ByCuUh9cGikBRThRd0ZnM1d6LVE";
-  var verify_token = PropertiesService.getScriptProperties().getProperty('OUTGOING_WEBHOOK_TOKEN');
+  var botName = "お天気ババア";
+  var botIcon = "http://drive.google.com/uc?export=view&id=0ByCuUh9cGikBRThRd0ZnM1d6LVE";
+  var verifyToken = PropertiesService.getScriptProperties().getProperty('OUTGOING_WEBHOOK_TOKEN');
   
   //投稿の認証
-  if (verify_token != e.parameter.token) {
+  if (verifyToken != e.parameter.token) {
     throw new Error("invalid token.");
   }
   
@@ -46,7 +46,7 @@ function doPost(e) {
   }
 
   return app.postMessage(e.parameter.channel_id, message, {
-    username: bot_name,
-    icon_url: bot_icon
+    username: botName,
+    iconUrl: botIcon
   });
 }
