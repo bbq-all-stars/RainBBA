@@ -24,7 +24,11 @@ function _doBBA(channelId, coodinates){
   var token = PropertiesService.getScriptProperties().getProperty('SLACK_ACCESS_TOKEN');
   var app = SlackApp.create(token);
 
-  var url = "https://map.yahooapis.jp/weather/V1/place?appid=" + yahooApiToken + "&coordinates=" + coodinates + "&output=json&interval=5";
+  var date = new Date();
+  date.setTime(date.getTime() - 5 * 60 * 1000);
+  date = formatDate(date, 'YYYYMMDDhhmm');
+
+  var url = "https://map.yahooapis.jp/weather/V1/place?appid=" + yahooApiToken + "&coordinates=" + coodinates + "&output=json&interval=5&date=" + date;
   var urlFetchOption = {
     'method' : 'get',
     'contentType' : 'application/json; charset=utf-8',
@@ -34,21 +38,32 @@ function _doBBA(channelId, coodinates){
   var json = JSON.parse(response.getContentText());
   var weatherList = json["Feature"][0]["Property"]["WeatherList"]["Weather"];
 
-  var nowRain = weatherList[0]["Rainfall"];
-  var nextRain = weatherList[1]["Rainfall"];
-  var message = "";
+  var pastRain = weatherList[0]["Rainfall"];
+  var nowRain = weatherList[1]["Rainfall"];
+  var nextRain = weatherList[2]["Rainfall"];
+
+  var pastRainfall = pastRain;
+  if (nowRain && (!pastRain || pastRain < nowRain)){
+    pastRainfall = pastRain;
+  }
+
   var rainfall = nowRain;
   if (nextRain && (!nowRain || nowRain < nextRain)){
     rainfall = nextRain;
   }
 
+  var pastMessage = _getBBAMessageIcon(pastRainfall)[0];
   var messageIcon = _getBBAMessageIcon(rainfall);
   var message = messageIcon[0];
   var botIcon = messageIcon[1];
-  return app.postMessage(channelId, message, {
-    username: botName,
-    icon_url: botIcon
-  });
+  if (pastMessage == message){
+    return
+  } else {
+    return app.postMessage(channelId, message, {
+      username: botName,
+      icon_url: botIcon
+    });
+  }
 }
 
 function _getBBAMessageIcon(rainfall){
