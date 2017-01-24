@@ -16,7 +16,7 @@ function doRoutine(){
 
 function _doBBA(channelId, coodinates, alwaysResponse){
   if (!coodinates){
-    coodinates = "35.6431249,139.7112571";
+    coodinates = "139.7112571,35.6431249";
   }
 
   var botName = "お天気ババア";
@@ -105,4 +105,4 @@ function formatDate(date, format) {
     for (var i = 0; i < length; i++) format = format.replace(/S/, milliSeconds.substring(i, i + 1));
   }
   return format;
-};
+}
