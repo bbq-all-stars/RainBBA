@@ -1,16 +1,27 @@
 function doPost(e) {
-  var token = PropertiesService.getScriptProperties().getProperty('SLACK_ACCESS_TOKEN');
-  var botName = "お天気ババア";
-  var botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba.png";
   var verifyToken = PropertiesService.getScriptProperties().getProperty('OUTGOING_WEBHOOK_TOKEN');
-  var yahooApiToken = PropertiesService.getScriptProperties().getProperty('YAHOO_API_TOKEN');
-  var coodinates = "35.6431249,139.7112571";
   
   //投稿の認証
   if (verifyToken != e.parameter.token) {
     throw new Error("invalid token.");
   }
-  
+
+  _doBBA(e.parameter.channel_id);
+}
+
+function doRoutine(){
+  var channelId = 'C3TFUF5CG'; // weather channel
+  _doBBA(channelId);
+}
+
+function _doBBA(channelId, coodinates){
+  if (!coodinates){
+    coodinates = "35.6431249,139.7112571";
+  }
+
+  var botName = "お天気ババア";
+  var yahooApiToken = PropertiesService.getScriptProperties().getProperty('YAHOO_API_TOKEN');
+  var token = PropertiesService.getScriptProperties().getProperty('SLACK_ACCESS_TOKEN');
   var app = SlackApp.create(token);
 
   var url = "https://map.yahooapis.jp/weather/V1/place?appid=" + yahooApiToken + "&coordinates=" + coodinates + "&output=json&interval=5";
@@ -30,6 +41,7 @@ function doPost(e) {
   if (nextRain && (!nowRain || nowRain < nextRain)){
     rainfall = nextRain;
   }
+  var botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba.png";
   if (!rainfall){
     message = "雨は降っとらん！！！";
   } else if (rainfall < 1){
@@ -50,7 +62,7 @@ function doPost(e) {
     message = "なにをしている！！！猛烈な雨じゃぞ！！！！一歩でも外に出たら死ぬぞ！！！！";
   }
 
-  return app.postMessage(e.parameter.channel_id, message, {
+  return app.postMessage(channelId, message, {
     username: botName,
     icon_url: botIcon
   });
