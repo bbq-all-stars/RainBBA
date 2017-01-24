@@ -41,6 +41,18 @@ function _doBBA(channelId, coodinates){
   if (nextRain && (!nowRain || nowRain < nextRain)){
     rainfall = nextRain;
   }
+
+  var messageIcon = _getBBAMessageIcon(rainfall);
+  var message = messageIcon[0];
+  var botIcon = messageIcon[1];
+  return app.postMessage(channelId, message, {
+    username: botName,
+    icon_url: botIcon
+  });
+}
+
+function _getBBAMessageIcon(rainfall){
+  var message = "";
   var botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba.png";
   if (!rainfall){
     message = "雨は降っとらん！！！";
@@ -61,11 +73,7 @@ function _doBBA(channelId, coodinates){
   } else {
     message = "なにをしている！！！猛烈な雨じゃぞ！！！！一歩でも外に出たら死ぬぞ！！！！";
   }
-
-  return app.postMessage(channelId, message, {
-    username: botName,
-    icon_url: botIcon
-  });
+  return [message, botIcon];
 }
 
 function formatDate(date, format) {
