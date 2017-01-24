@@ -6,15 +6,15 @@ function doPost(e) {
     throw new Error("invalid token.");
   }
 
-  _doBBA(e.parameter.channel_id);
+  _doBBA(e.parameter.channel_id, null, true);
 }
 
 function doRoutine(){
   var channelId = 'C3TFUF5CG'; // weather channel
-  _doBBA(channelId);
+  _doBBA(channelId, null, false);
 }
 
-function _doBBA(channelId, coodinates){
+function _doBBA(channelId, coodinates, alwaysResponse){
   if (!coodinates){
     coodinates = "35.6431249,139.7112571";
   }
@@ -56,7 +56,7 @@ function _doBBA(channelId, coodinates){
   var messageIcon = _getBBAMessageIcon(rainfall);
   var message = messageIcon[0];
   var botIcon = messageIcon[1];
-  if (pastMessage == message){
+  if (!alwaysResponse && pastMessage == message){
     return
   } else {
     return app.postMessage(channelId, message, {
