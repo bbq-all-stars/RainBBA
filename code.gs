@@ -2,16 +2,30 @@ function doPost(e) {
   var verifyToken = PropertiesService.getScriptProperties().getProperty('OUTGOING_WEBHOOK_TOKEN');
   
   //投稿の認証
-  if (verifyToken != e.parameter.token) {
-    throw new Error("invalid token.");
-  }
+  try {
+    if (verifyToken != e.parameter.token) {
+      throw new Error("invalid token.");
+    }
 
-  _doBBA(e.parameter.channel_id, null, true);
+    _doBBA(e.parameter.channel_id, null, true);
+
+  } catch(error) {
+    doError(error.message)
+  }
 }
 
 function doRoutine(){
   var channelId = 'C3TFUF5CG'; // weather channel
   _doBBA(channelId, null, false);
+}
+
+function doError(message){
+  var botName = "お天気ババア";
+  var botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba_error.jpg";
+  app.postMessage(channelId, message + "\n" + botIcon, {
+    username: botName,
+    icon_url: botIcon
+  });
 }
 
 function _doBBA(channelId, coodinates, alwaysResponse){
