@@ -66,52 +66,37 @@ function _doBBA(channelId, coodinates, alwaysResponse){
     rainfall = nextRain;
   }
 
-  var pastMessage = _getBBAMessageIcon(pastRainfall)[0];
-  var messageIcon = _getBBAMessageIcon(rainfall);
-  var message = messageIcon[0];
-  var botIcon = messageIcon[1];
-  if (!alwaysResponse && pastMessage == message){
-    return
-  } else {
-    return app.postMessage(channelId, message, {
+  var pastIcon = _getBBAIcon(pastRainfall);
+  var icon = _getBBAIcon(rainfall);
+  if (alwaysResponse || pastIcon != icon){
+    app.postMessage(channelId, icon, {
       username: botName,
-      icon_url: botIcon
+      icon_url: icon
     });
   }
+  return
 }
 
-function _getBBAMessageIcon(rainfall){
-  var message = "";
-  var botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba_error.jpg";
+function _getBBAIcon(rainfall){
+  var botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba09.jpg";
   if (!rainfall){
-    message = "雨は降っとらん！！！";
     botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba01.jpg";
   } else if (rainfall < 1){
-    message = "小雨が降っとるかもしれんな。";
     botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba02.jpg";
   } else if (rainfall < 3){
-    message = "弱い雨が降っておる。気になるなら傘を持っていったほうがよいじゃろう。";
     botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba03.jpg";
   } else if (rainfall < 10){
-    message = "雨が降っておる。傘は持ったか？";
     botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba04.jpg";
   } else if (rainfall < 20){
-    message = "やや強い雨じゃ。傘は持ったか？";
     botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba05.jpg";
   } else if (rainfall < 30){
-    message = "強い雨じゃ！出かけるなら必ず傘を持っていきなさい。";
     botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba06.jpg";
   } else if (rainfall < 50){
-    message = "激しい雨が降っておる！！バケツを引っくり返したようじゃ！！！出かけんほうががええ！";
     botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba07.jpg";
   } else if (rainfall < 80){
-    message = "非常に激しい雨でまるで瀧のようじゃ！！！！外に出るのはやめるんじゃ！！";
     botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba08.jpg";
-  } else {
-    message = "なにをしている！！！猛烈な雨じゃぞ！！！！一歩でも外に出たら死ぬぞ！！！！";
-    botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba09.jpg";
   }
-  return [message, botIcon];
+  return botIcon;
 }
 
 function formatDate(date, format) {
