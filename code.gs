@@ -43,7 +43,7 @@ function doRoutine(){
 function doError(message){
   app.postMessage(
     channelId, 
-    "",
+    message,
     {
       username: botName,
       icon_url: errorIcon,
