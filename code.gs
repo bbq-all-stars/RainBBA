@@ -29,6 +29,11 @@ function doPost(e) {
     }
     channelId = e.parameter.channel_id;
 
+    if (e.parameter.text == "rain? list"){
+      _doListBBA();
+      return
+    }
+    
     _doBBA(null, true);
 
   } catch(error) {
@@ -51,6 +56,39 @@ function doError(message){
         pretext: "",
         image_url: errorIcon
       }])
+    }
+  );
+  return
+}
+
+function _doListBBA(){
+  var data = [];
+  for (var i = 0; i < rainfallIconList.length; i++){
+    if (i == 0) {
+      data.push({
+        text : "降水強度 : 0 mm/h",
+        image_url: rainfallIconList[i].icon,
+        color : rainfallIconList[i].color
+      });
+    } else {
+      data.push({
+        text : "降水強度 : " + rainfallIconList[i].rainfall + "mm/h以上",
+        image_url: rainfallIconList[i].icon,
+        color : rainfallIconList[i].color
+      });
+    }
+  }
+  data.push({
+    text : "APIエラー時",
+    image_url: errorIcon
+  });
+  app.postMessage(
+    channelId, 
+    "",
+    {
+      username: botName,
+      icon_url: rainfallIconList[0].icon,
+      attachments: JSON.stringify(data),
     }
   );
   return
