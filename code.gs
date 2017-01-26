@@ -10,15 +10,15 @@ var channelId = DEFAULT_WEATHER_CHANNEL;
 
 var errorIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba_error.jpg";
 var rainfallIconList = [
-  {rainfall : null, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba01.jpg"},
-  {rainfall :    0, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba02.jpg"},
-  {rainfall :    1, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba03.jpg"},
-  {rainfall :    3, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba04.jpg"},
-  {rainfall :   10, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba05.jpg"},
-  {rainfall :   20, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba06.jpg"},
-  {rainfall :   30, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba07.jpg"},
-  {rainfall :   50, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba08.jpg"},
-  {rainfall :   80, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba09.jpg"},
+  {rainfall : null, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba01.jpg", color : "#00ff00"},
+  {rainfall :    0, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba02.jpg", color : "#7fff00"},
+  {rainfall :    1, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba03.jpg", color : "#ffff00"},
+  {rainfall :    3, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba04.jpg", color : "#ff7f00"},
+  {rainfall :   10, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba05.jpg", color : "#ff0000"},
+  {rainfall :   20, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba06.jpg", color : "#ff007f"},
+  {rainfall :   30, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba07.jpg", color : "#ff00ff"},
+  {rainfall :   50, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba08.jpg", color : "#7f00ff"},
+  {rainfall :   80, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba09.jpg", color : "#0000ff"},
 ];
 
 function doPost(e) {
@@ -89,8 +89,10 @@ function _doBBA(coodinates, alwaysResponse){
     rainfall = nextRain;
   }
 
-  var pastIcon = _getBBAIcon(pastRainfall);
-  var icon = _getBBAIcon(rainfall);
+  var pastIcon = _getBBAIcon(pastRainfall)[0];
+  var iconColor = _getBBAIcon(rainfall);
+  var icon = iconColor[0];
+  var color = iconColor[1];
   if (alwaysResponse || pastIcon != icon){
     app.postMessage(
       channelId, 
@@ -100,7 +102,8 @@ function _doBBA(coodinates, alwaysResponse){
         icon_url: icon,
         attachments: JSON.stringify([{
           pretext: "",
-          image_url: icon
+          image_url: icon,
+          color : color
         }])
       }
     );
@@ -109,11 +112,11 @@ function _doBBA(coodinates, alwaysResponse){
 }
 
 function _getBBAIcon(rainfall){
-  if (!rainfall) return rainfallIconList[0].icon;
+  if (!rainfall) return [rainfallIconList[0].icon, rainfallIconList[0].color];
 
   for (var i = rainfallIconList.length - 1; i >= 0; i--){
     if (rainfall >= rainfallIconList[i].rainfall){
-      return rainfallIcon.icon
+      return [rainfallIconList[i].icon, rainfallIconList[i].color]
     }
   }
 }
