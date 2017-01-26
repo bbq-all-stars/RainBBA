@@ -1,9 +1,15 @@
+var OUTGOING_WEBHOOK_TOKEN = PropertiesService.getScriptProperties().getProperty('OUTGOING_WEBHOOK_TOKEN');
+var SLACK_ACCESS_TOKEN = PropertiesService.getScriptProperties().getProperty('SLACK_ACCESS_TOKEN');
+var YAHOO_API_TOKEN = PropertiesService.getScriptProperties().getProperty('YAHOO_API_TOKEN');
+var DEFAULT_COODINATES = PropertiesService.getScriptProperties().getProperty('DEFAULT_COODINATES');
+var DEFAULT_WEATHER_CHANNEL = PropertiesService.getScriptProperties().getProperty('DEFAULT_WEATHER_CHANNEL');
+
+var app = SlackApp.create(SLACK_ACCESS_TOKEN);
+
 function doPost(e) {
-  var verifyToken = PropertiesService.getScriptProperties().getProperty('OUTGOING_WEBHOOK_TOKEN');
-  
   //投稿の認証
   try {
-    if (verifyToken != e.parameter.token) {
+    if (OUTGOING_WEBHOOK_TOKEN != e.parameter.token){
       throw new Error("invalid token.");
     }
 
@@ -15,8 +21,7 @@ function doPost(e) {
 }
 
 function doRoutine(){
-  var channelId = 'C3TFUF5CG'; // weather channel
-  _doBBA(channelId, null, false);
+  _doBBA(DEFAULT_WEATHER_CHANNEL, null, false);
 }
 
 function doError(message){
@@ -29,20 +34,16 @@ function doError(message){
 }
 
 function _doBBA(channelId, coodinates, alwaysResponse){
-  if (!coodinates){
-    coodinates = "139.7112571,35.6431249";
-  }
-
+  if (!coodinates) coodinates = DEFAULT_COODINATES;
+  
   var botName = "お天気ババア";
-  var yahooApiToken = PropertiesService.getScriptProperties().getProperty('YAHOO_API_TOKEN');
-  var token = PropertiesService.getScriptProperties().getProperty('SLACK_ACCESS_TOKEN');
-  var app = SlackApp.create(token);
+  var app = SlackApp.create(SLACK_ACCESS_TOKEN);
 
   var date = new Date();
   date.setTime(date.getTime() - 5 * 60 * 1000);
   date = formatDate(date, 'YYYYMMDDhhmm');
 
-  var url = "https://map.yahooapis.jp/weather/V1/place?appid=" + yahooApiToken + "&coordinates=" + coodinates + "&output=json&interval=5&date=" + date;
+  var url = "https://map.yahooapis.jp/weather/V1/place?appid=" + YAHOO_API_TOKEN + "&coordinates=" + coodinates + "&output=json&interval=5&date=" + date;
   var urlFetchOption = {
     'method' : 'get',
     'contentType' : 'application/json; charset=utf-8',
