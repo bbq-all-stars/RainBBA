@@ -6,6 +6,7 @@ var DEFAULT_WEATHER_CHANNEL = PropertiesService.getScriptProperties().getPropert
 
 var app = SlackApp.create(SLACK_ACCESS_TOKEN);
 var botName = "お天気ババア";
+var channelId = DEFAULT_WEATHER_CHANNEL;
 
 var errorIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba_error.jpg";
 var rainfallIconList = [
@@ -26,8 +27,9 @@ function doPost(e) {
     if (OUTGOING_WEBHOOK_TOKEN != e.parameter.token){
       throw new Error("invalid token.");
     }
+    channelId = e.parameter.channel_id;
 
-    _doBBA(e.parameter.channel_id, null, true);
+    _doBBA(null, true);
 
   } catch(error) {
     doError(error.message)
@@ -35,7 +37,7 @@ function doPost(e) {
 }
 
 function doRoutine(){
-  _doBBA(DEFAULT_WEATHER_CHANNEL, null, false);
+  _doBBA(null, false);
 }
 
 function doError(message){
@@ -54,7 +56,7 @@ function doError(message){
   return
 }
 
-function _doBBA(channelId, coodinates, alwaysResponse){
+function _doBBA(coodinates, alwaysResponse){
   if (!coodinates) coodinates = DEFAULT_COODINATES;
   
   var app = SlackApp.create(SLACK_ACCESS_TOKEN);
