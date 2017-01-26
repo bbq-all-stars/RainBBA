@@ -39,17 +39,24 @@ function doRoutine(){
 }
 
 function doError(message){
-  var botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba_error.jpg";
-  app.postMessage(channelId, message + "\n" + botIcon, {
-    username: botName,
-    icon_url: botIcon
-  });
+  app.postMessage(
+    channelId, 
+    "",
+    {
+      username: botName,
+      icon_url: errorIcon,
+      attachments: JSON.stringify([{
+        pretext: "",
+        image_url: errorIcon
+      }])
+    }
+  );
+  return
 }
 
 function _doBBA(channelId, coodinates, alwaysResponse){
   if (!coodinates) coodinates = DEFAULT_COODINATES;
   
-  var botName = "お天気ババア";
   var app = SlackApp.create(SLACK_ACCESS_TOKEN);
 
   var date = new Date();
@@ -83,10 +90,18 @@ function _doBBA(channelId, coodinates, alwaysResponse){
   var pastIcon = _getBBAIcon(pastRainfall);
   var icon = _getBBAIcon(rainfall);
   if (alwaysResponse || pastIcon != icon){
-    app.postMessage(channelId, icon, {
-      username: botName,
-      icon_url: icon
-    });
+    app.postMessage(
+      channelId, 
+      "",
+      {
+        username: botName,
+        icon_url: icon,
+        attachments: JSON.stringify([{
+          pretext: "",
+          image_url: icon
+        }])
+      }
+    );
   }
   return
 }
