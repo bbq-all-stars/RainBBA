@@ -6,6 +6,19 @@ var DEFAULT_WEATHER_CHANNEL = PropertiesService.getScriptProperties().getPropert
 
 var app = SlackApp.create(SLACK_ACCESS_TOKEN);
 
+var errorIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba_error.jpg";
+var rainfallIconList = [
+  {rainfall : null, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba01.jpg"},
+  {rainfall :    0, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba02.jpg"},
+  {rainfall :    1, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba03.jpg"},
+  {rainfall :    3, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba04.jpg"},
+  {rainfall :   10, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba05.jpg"},
+  {rainfall :   20, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba06.jpg"},
+  {rainfall :   30, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba07.jpg"},
+  {rainfall :   50, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba08.jpg"},
+  {rainfall :   80, icon : "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba09.jpg"},
+];
+
 function doPost(e) {
   //投稿の認証
   try {
@@ -79,25 +92,13 @@ function _doBBA(channelId, coodinates, alwaysResponse){
 }
 
 function _getBBAIcon(rainfall){
-  var botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba09.jpg";
-  if (!rainfall){
-    botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba01.jpg";
-  } else if (rainfall < 1){
-    botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba02.jpg";
-  } else if (rainfall < 3){
-    botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba03.jpg";
-  } else if (rainfall < 10){
-    botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba04.jpg";
-  } else if (rainfall < 20){
-    botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba05.jpg";
-  } else if (rainfall < 30){
-    botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba06.jpg";
-  } else if (rainfall < 50){
-    botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba07.jpg";
-  } else if (rainfall < 80){
-    botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba08.jpg";
+  if (!rainfall) return rainfallIconList[0].icon;
+
+  for (var i = rainfallIconList.length - 1; i >= 0; i--){
+    if (rainfall >= rainfallIconList[i].rainfall){
+      return rainfallIcon.icon
+    }
   }
-  return botIcon;
 }
 
 function formatDate(date, format) {
