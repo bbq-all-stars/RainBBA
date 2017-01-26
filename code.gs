@@ -66,20 +66,20 @@ function _doListBBA(){
   for (var i = 0; i < rainfallIconList.length; i++){
     if (i == 0) {
       data.push({
-        text : "降水強度 : 0 mm/h",
+        title : "降水強度 : 0 mm/h",
         image_url: rainfallIconList[i].icon,
         color : rainfallIconList[i].color
       });
     } else {
       data.push({
-        text : "降水強度 : " + rainfallIconList[i].rainfall + "mm/h以上",
+        title : "降水強度 : " + rainfallIconList[i].rainfall + "mm/h以上",
         image_url: rainfallIconList[i].icon,
         color : rainfallIconList[i].color
       });
     }
   }
   data.push({
-    text : "APIエラー時",
+    title : "APIエラー時",
     image_url: errorIcon
   });
   app.postMessage(
