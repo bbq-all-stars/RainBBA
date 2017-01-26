@@ -5,6 +5,7 @@ var DEFAULT_COODINATES = PropertiesService.getScriptProperties().getProperty('DE
 var DEFAULT_WEATHER_CHANNEL = PropertiesService.getScriptProperties().getProperty('DEFAULT_WEATHER_CHANNEL');
 
 var app = SlackApp.create(SLACK_ACCESS_TOKEN);
+var botName = "お天気ババア";
 
 var errorIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba_error.jpg";
 var rainfallIconList = [
@@ -38,7 +39,6 @@ function doRoutine(){
 }
 
 function doError(message){
-  var botName = "お天気ババア";
   var botIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba_error.jpg";
   app.postMessage(channelId, message + "\n" + botIcon, {
     username: botName,
