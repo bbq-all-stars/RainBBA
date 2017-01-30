@@ -3,10 +3,12 @@ var SLACK_ACCESS_TOKEN = PropertiesService.getScriptProperties().getProperty('SL
 var YAHOO_API_TOKEN = PropertiesService.getScriptProperties().getProperty('YAHOO_API_TOKEN');
 var DEFAULT_COODINATES = PropertiesService.getScriptProperties().getProperty('DEFAULT_COODINATES');
 var DEFAULT_WEATHER_CHANNEL = PropertiesService.getScriptProperties().getProperty('DEFAULT_WEATHER_CHANNEL');
+var NOTIFICATION_MAIL_ADDRESS = PropertiesService.getScriptProperties().getProperty('NOTIFICATION_MAIL_ADDRESS');
 
 var app = SlackApp.create(SLACK_ACCESS_TOKEN);
 var botName = "お天気ババア";
 var channelId = DEFAULT_WEATHER_CHANNEL;
+var isDebugMode = false;
 
 var errorIcon = "https://s3-ap-northeast-1.amazonaws.com/rain-bba/bba_error.jpg";
 var rainfallIconList = [
@@ -110,7 +112,8 @@ function _doBBA(coodinates, alwaysResponse){
     'muteHttpExceptions' : true
   };
   var response = UrlFetchApp.fetch(url, urlFetchOption);
-  var json = JSON.parse(response.getContentText());
+  var responseText = response.getContentText();
+  var json = JSON.parse(responseText);
   var weatherList = json["Feature"][0]["Property"]["WeatherList"]["Weather"];
 
   var pastRain = weatherList[0]["Rainfall"];
@@ -132,6 +135,7 @@ function _doBBA(coodinates, alwaysResponse){
   var icon = iconColor[0];
   var color = iconColor[1];
   if (alwaysResponse || pastIcon != icon){
+    _sendDebugMail(responseText);
     app.postMessage(
       channelId, 
       "",
@@ -173,4 +177,14 @@ function formatDate(date, format) {
     for (var i = 0; i < length; i++) format = format.replace(/S/, milliSeconds.substring(i, i + 1));
   }
   return format;
+}
+
+function _sendDebugMail(message){
+  if (!isDebugMode){
+    return
+  }
+  var title = 'お天気ババア デバッグ情報';
+
+  MailApp.sendEmail(NOTIFICATION_MAIL_ADDRESS, title, message);
+  return
 }
